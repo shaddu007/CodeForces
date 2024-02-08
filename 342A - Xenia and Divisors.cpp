@@ -1,36 +1,62 @@
-//4592917	 Sep 28, 2013 4:40:12 AM	fuwutu	 342A - Xenia and Divisors	 GNU C++0x	Accepted	62 ms	0 KB
-#include <cstdio>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <unordered_map>
+using namespace std;
 
 int main()
 {
-    int n, x, count[8] = {0};
-    scanf("%d", &n);
-    for (int i = 0; i < n; ++i)
+    int n;
+    cin >> n;
+    vector<int>cnt(10,0);
+    for (int i = 0; i < n; i++)
     {
-        scanf("%d", &x);
-        count[x] += 1;
+        int buf;
+        cin >> buf;
+        cnt[buf]++;
     }
-
-    bool solution;
-    if (count[5] == 0 && count[7] == 0 && count[2] >= count[4] && count[1] == count[4] + count[6] && count[2] + count[3] == count[4] + count[6])
+    vector<int> ans(5, 0);
+    bool flag = true;
+    for (int i = 0; i < n / 3; i++)
     {
-        for (int i = 0; i < count[4]; ++i)
+        if (cnt[4] > 0 && cnt[2] > 0 && cnt[1] > 0)
         {
-            printf("1 2 4\n");
+            ans[0]++;
+            cnt[4]--;
+            cnt[2]--;
+            cnt[1]--;
+            continue;
         }
-        count[2] -= count[4];
-        for (int i = 0; i < count[2]; ++i)
+        if (cnt[6] > 0 && cnt[2] > 0 && cnt[1] > 0)
         {
-            printf("1 2 6\n");
+            ans[1]++;
+            cnt[6]--;
+            cnt[2]--;
+            cnt[1]--;
+            continue;
         }
-        for (int i = 0; i < count[3]; ++i)
+        if (cnt[6] > 0 && cnt[3] > 0 && cnt[1] > 0)
         {
-            printf("1 3 6\n");
+            ans[2]++;
+            cnt[6]--;
+            cnt[3]--;
+            cnt[1]--;
+            continue;
         }
+        flag = false;
+        break;
     }
+    if (flag == false)
+        cout << "-1\n";
     else
     {
-        printf("-1\n");
+        for (int i = 0; i < ans[0]; i++)
+            cout << "1 2 4\n";
+        for (int i = 0; i < ans[1]; i++)
+            cout << "1 2 6\n";
+        for (int i = 0; i < ans[2]; i++)
+            cout << "1 3 6\n";
     }
     return 0;
 }
